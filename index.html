@@ -7,7 +7,7 @@
     <meta name="description" content="Персональный план тренировок и восстановления Ирины" />
     <title>PROJECT 46</title>
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=11" />
+    <link rel="stylesheet" href="./styles.css?v=15" />
   </head>
   <body>
     <div class="app-shell">
@@ -16,10 +16,7 @@
           <span class="brand-mark">46</span>
           <span>PROJECT 46</span>
         </button>
-        <div class="top-actions">
-          <button class="sync-button" data-action="open-sync" aria-label="Настроить синхронизацию"><span id="sync-dot"></span><span id="sync-label">Локально</span></button>
-          <button class="avatar" data-action="open-weight" aria-label="Добавить вес">И</button>
-        </div>
+        <button class="avatar" data-action="open-weight" aria-label="Добавить вес">И</button>
       </header>
 
       <main>
@@ -197,24 +194,7 @@
       </form>
     </dialog>
 
-    <dialog id="sync-dialog">
-      <article class="dialog-card sync-card">
-        <button class="dialog-close" data-action="close-sync" aria-label="Закрыть">×</button>
-        <p class="eyebrow">Supabase Sync</p>
-        <h2>Один прогресс<br />на всех устройствах</h2>
-        <p id="sync-description">Подключи email, чтобы вес и отметки автоматически появились на телефоне и компьютере.</p>
-        <form id="sync-form">
-          <label class="sync-email">
-            <span>Email</span>
-            <input id="sync-email" type="email" required placeholder="you@example.com" />
-          </label>
-          <button class="primary-button full-width" type="submit">Прислать ссылку для входа</button>
-        </form>
-        <button class="text-button sync-signout" data-action="sign-out" hidden>Выйти из облака</button>
-      </article>
-    </dialog>
-
     <div class="toast" id="toast" role="status"></div>
-    <script type="module" src="./app.js?v=11"></script>
+    <script type="module" src="./app.js?v=15"></script>
   </body>
 </html>

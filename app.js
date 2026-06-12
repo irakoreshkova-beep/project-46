@@ -1,5 +1,3 @@
-import { initSync, scheduleSync, sendMagicLink, signOut } from "./sync.js?v=11";
-
 const dayPlans = [
   { short: "пн", type: "strength", title: "Тренировка A", detail: "Ноги · ягодицы · спина", time: "45 мин" },
   { short: "вт", type: "walk", title: "Прогулка в хорошем темпе", detail: "Свежий воздух · ровный темп", time: "40 мин" },
@@ -58,51 +56,6 @@ function persistState() {
   localStorage.setItem("p46-habits", JSON.stringify(state.habits));
   localStorage.setItem("p46-weights", JSON.stringify(state.weights));
   localStorage.setItem("p46-checkins", JSON.stringify(state.checkins));
-  scheduleSync(state);
-}
-
-function applySyncedState(syncedState) {
-  if (!syncedState) return;
-  Object.assign(state, syncedState);
-  localStorage.setItem("p46-mode", state.mode);
-  localStorage.setItem("p46-effort", JSON.stringify(state.effort));
-  localStorage.setItem("p46-habits", JSON.stringify(state.habits));
-  localStorage.setItem("p46-weights", JSON.stringify(state.weights));
-  localStorage.setItem("p46-checkins", JSON.stringify(state.checkins));
-  renderToday();
-  renderWorkout();
-  renderProgress();
-}
-
-function renderSyncStatus(result) {
-  const button = document.querySelector(".sync-button");
-  const label = document.querySelector("#sync-label");
-  const form = document.querySelector("#sync-form");
-  const signout = document.querySelector(".sync-signout");
-  const description = document.querySelector("#sync-description");
-  button.classList.remove("synced", "error");
-  if (result.status === "synced") {
-    button.classList.add("synced");
-    label.textContent = "В облаке";
-    form.hidden = true;
-    signout.hidden = false;
-    description.textContent = `Синхронизация включена${result.user?.email ? ` для ${result.user.email}` : ""}. Изменения сохраняются автоматически.`;
-    applySyncedState(result.state);
-  } else if (result.status === "error") {
-    button.classList.add("error");
-    label.textContent = "Офлайн";
-    description.textContent = "Локальные данные сохранены. Облако подключится, когда вернётся интернет.";
-  } else if (result.status === "not-configured") {
-    label.textContent = "Настроить";
-    form.hidden = true;
-    signout.hidden = true;
-    description.textContent = "Supabase ещё не подключён. Выполни шаги из SUPABASE_SETUP.md перед публикацией.";
-  } else {
-    label.textContent = "Локально";
-    form.hidden = false;
-    signout.hidden = true;
-    description.textContent = "Войди одной почтой на телефоне и компьютере. Текущая локальная история будет перенесена в облако.";
-  }
 }
 
 function seedWeights() {
@@ -263,13 +216,6 @@ document.addEventListener("click", (event) => {
 
   const action = event.target.closest("[data-action]")?.dataset.action;
   if (action === "open-weight") document.querySelector("#weight-dialog").showModal();
-  if (action === "open-sync") document.querySelector("#sync-dialog").showModal();
-  if (action === "close-sync") document.querySelector("#sync-dialog").close();
-  if (action === "sign-out") {
-    signOut();
-    document.querySelector("#sync-dialog").close();
-    toast("Облачная синхронизация отключена");
-  }
   if (action === "close-exercise") document.querySelector("#exercise-dialog").close();
   if (action === "finish-workout") document.querySelector("#checkin-dialog").showModal();
   if (action === "save-weight") {
@@ -348,23 +294,9 @@ document.querySelector("#primary-action").addEventListener("click", () => {
   }
 });
 
-document.querySelector("#sync-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const email = document.querySelector("#sync-email").value.trim();
-  try {
-    await sendMagicLink(email);
-    document.querySelector("#sync-dialog").close();
-    toast("Ссылка для входа отправлена на почту");
-  } catch (error) {
-    toast(error.message || "Не удалось отправить ссылку");
-  }
-});
-
 renderToday();
 renderWeek();
 renderWorkout();
 renderProgress();
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
-
-initSync(state, renderSyncStatus).then(renderSyncStatus);
