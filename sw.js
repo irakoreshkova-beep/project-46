@@ -1,5 +1,5 @@
-const CACHE = "project-46-v15";
-const ASSETS = ["./", "./index.html", "./styles.css?v=15", "./app.js?v=15", "./manifest.webmanifest", "./icon.svg", "./assets/exercises/workout-a.png", "./assets/exercises/workout-b.png", "./assets/exercises/workout-c.png"];
+const CACHE = "project-46-v17";
+const ASSETS = ["./", "./index.html", "./styles.css?v=17", "./app.js?v=17", "./manifest.webmanifest", "./icon.svg", "./assets/exercises/workout-a.png", "./assets/exercises/workout-b.png", "./assets/exercises/workout-c.png"];
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
